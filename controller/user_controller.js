@@ -95,9 +95,8 @@ exports.getProfile = (username) =>
   new Promise((resolve, reject) => {
     user
       .find({ role: "DOSEN" })
-    
+      
       .then((users) => {
-       
         resolve(users);
       })
       .catch((err) =>

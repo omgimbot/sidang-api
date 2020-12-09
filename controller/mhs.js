@@ -62,6 +62,16 @@ exports.getAllPengajuan = (key, nidn) =>
       .catch((err) => reject(requestResponse.common_error));
   });
 
+  exports.getMhsKompre = () =>
+  new Promise((resolve, reject) => {
+    kompre
+      .find({status: "acc" })
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((err) => reject(requestResponse.common_error));
+  });
+
 exports.getPengumuman = (nim) =>
   new Promise((resolve, reject) => {
     var data = [];
