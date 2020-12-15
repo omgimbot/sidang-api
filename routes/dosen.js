@@ -3,6 +3,27 @@ const uploadConf = require("../config/uploadSetting");
 const fields = uploadConf.upload.single("myFile");
 module.exports = (router) => {
 
+  router.post("/inputPengujiMhs", (req, res) => {
+    let data = req.body
+      dosen
+        .inputPengujiMhs(data)
+        .then((result) => {
+          res.json(result)
+        }).catch((err) => {
+          res.json(err)
+        })
+    })
+
+  router.get("/getListPengujiMhs", (req, res) => {
+      // console.log("sadfsff")
+      dosen
+        .getListPengujiMhs()
+          .then((result) => res.json(result))
+          .catch((err) => {
+            console.log(err)
+          });
+  });
+
   router.post("/inputPenguji", (req, res) => {
     let data = req.body
       dosen
@@ -12,6 +33,15 @@ module.exports = (router) => {
         }).catch((err) => {
           res.json(err)
         })
+    })
+
+  router.put("/updatePenguji/:id", (req, res) => {
+    dosen.updatePenguji(req.body, req.params.id)
+        .then((result) => {
+            res.json(result)
+          }).catch((err) => {
+            res.json(err)
+          })
     })
 
   router.delete("/hapuspenguji/:id", (req, res) => {

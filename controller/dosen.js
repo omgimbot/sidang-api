@@ -4,35 +4,142 @@ const munaqosah = require("../model/munaqosah");
 const mk = require("../model/mataKuliah");
 const sempro = require("../model/sempro");
 const penguji = require("../model/penguji");
+const pengujiMhs = require("../model/pengujiMhs")
 const { requestResponse } = require("../setup");
 const mongoose = require("mongoose")
 const ObjectId = mongoose.Types.ObjectId
 
+exports.inputPengujiMhs = (data) =>
+  new Promise((resolve, reject) => {
+    pengujiMhs
+      .create(data)
+        .then(() => resolve(
+          requestResponse.common_success
+        )).catch((err) => reject(
+          console.log(err)
+        ))
+  })
+
+    exports.getListPengujiMhs = () =>
+    new Promise((resolve, reject) => {
+      pengujiMhs.aggregate([
+          {
+            $lookup:
+            {
+              from: "pengujis",
+              localField: "mk1",
+              foreignField: "nim",
+              as: "pengujiMk1"
+            }
+          },
+          {
+            $lookup:
+            {
+              from: "pengujis",
+              localField: "mk2",
+              foreignField: "nim",
+              as: "pengujiMk2"
+            }
+          },
+          {
+            $lookup:
+            {
+              from: "pengujis",
+              localField: "mk3",
+              foreignField: "nim",
+              as: "pengujiMk3"
+            }
+          },
+          {
+            $lookup:
+            {
+              from: "pengujis",
+              localField: "mk4",
+              foreignField: "nim",
+              as: "pengujiMk4"
+            }
+          },
+          {
+            $lookup:
+            {
+              from: "pengujis",
+              localField: "mk5",
+              foreignField: "nim",
+              as: "pengujiMk5"
+            }
+          },
+          {
+            $lookup:
+            {
+              from: "pengujis",
+              localField: "mk6",
+              foreignField: "nim",
+              as: "pengujiMk6",
+            }
+          },
+          {$unwind:'$pengujiMk1'},
+          {$unwind:'$pengujiMk2'},
+          {$unwind:'$pengujiMk3'},
+          {$unwind:'$pengujiMk4'},
+          {$unwind:'$pengujiMk5'},
+          {$unwind:'$pengujiMk6'},
+          {
+            $project : {
+            namaMhs : "",
+            nim : "$_id.param",
+            pengujimk1 : "$rate"
+        }
+          }
+        ])
+        .then((dataPengujiMhs) => {
+          resolve(dataPengujiMhs);
+        })
+        .catch((err) => reject(requestResponse.common_error))
+        
+    });
+
 exports.inputPenguji = (data) =>
   new Promise((resolve, reject) => {
-    // console.log(data)
-      penguji
-        .create(data)
+    penguji
+      .create(data)
+        .then(() => resolve(
+          requestResponse.common_success
+        )).catch((err) => reject(
+          console.log(err)
+        ))
+  })
+
+  exports.updatePenguji = (data, id) =>
+    new Promise((resolve, reject)=>{
+      try{
+          penguji.updateOne(
+              {
+                _id: ObjectId(id)
+              }, { $set: data }
+          )
           .then(() => resolve(
             requestResponse.common_success
           )).catch((err) => reject(
-            console.log(err)
-          ))
-  })
+          console.log(err)
+        ))
+      }catch(err) {
+        console.log(err)
+      }
+    })
 
   exports.getListPenguji = () =>
     new Promise((resolve, reject) => {
       penguji.aggregate([
-              {
-                $lookup:
-                    {
-                        from: "matakuliahs",
-                        localField: "kodeMk",
-                        foreignField: "kodeMk",
-                        as: "mk"
-                    }
-              },
-            { $unwind:'$mk' }])
+          {
+            $lookup:
+                {
+                  from: "matakuliahs",
+                  localField: "kodeMk",
+                  foreignField: "kodeMk",
+                  as: "mk"
+                }
+          },
+          { $unwind:'$mk' }])
         .then((dataPenguji) => {
           resolve(dataPenguji);
         })
@@ -42,18 +149,19 @@ exports.inputPenguji = (data) =>
 
   exports.hapusPenguji = (id) =>
   new Promise((resolve, reject) => {
-    console.log(id)
+    // console.log(id)
       try {
         penguji
         .deleteOne({
           _id: ObjectId(id)
         })
-          .then((e) => {
-            console.log(e)
-            resolve(requestResponse.common_success)
+          .then(() => {
+            // console.log(e)
+            resolve(requestResponse.common_delete)
           })
-          .catch((err) => reject(
-            console.log(err)
+          .catch(() => reject(
+            // console.log(err)
+            requestResponse.common_error
           ))
       } catch (err) {
         console.log(err)
@@ -75,8 +183,9 @@ exports.inputPenguji = (data) =>
 
   exports.getListMk = () =>
   new Promise((resolve, reject) => {
+    var mysort = { created_at: -1 };
     mk
-      .find({})
+      .find({}).sort(mysort)
       .then((mataKuliah) => {
         resolve(mataKuliah);
       })
@@ -118,7 +227,9 @@ exports.inputPenguji = (data) =>
       model = sempro;
     }
     model
-      .updateOne({nim : nim},{status:status})
+      .updateOne(
+        {nim : nim},
+        {status:status})
       .then(() => {
         resolve(requestResponse.common_success);
       })
