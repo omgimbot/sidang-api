@@ -27,6 +27,41 @@ module.exports = (router) => {
       });
   });
 
+  router.post("/tracerStudy", fields, (req, res) => {
+    mhs
+      .tracerStudi(req.body)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.get("/listTracer", (req, res) => {
+    mhs
+      .getAllTracer()
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.get("/listTracerByNim/:nim", (req, res) => {
+    let nim = req.params.nim
+    mhs
+      .getTracerByNim(nim)
+      .then((result) => {
+        res.json(result);
+        console.log(result)
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
   router.get("/cekJudul/:nim/:key", (req, res) => {
     let nim = req.params.nim
     let key = req.params.key
@@ -44,6 +79,7 @@ module.exports = (router) => {
   router.get("/listpengajuan/:key/:nidn", (req, res) => {
     let key = req.params.key
     let nidn = req.params.nidn
+    console.log(key)
     mhs
       .getAllPengajuan(key,nidn)
       .then((result) => {

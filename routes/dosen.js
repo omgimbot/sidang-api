@@ -14,10 +14,11 @@ module.exports = (router) => {
         })
     })
 
-  router.get("/getListPengujiMhs", (req, res) => {
+  router.get("/getListPengujiMhs/:nim", (req, res) => {
       // console.log("sadfsff")
+      let nim = req.params.nim
       dosen
-        .getListPengujiMhs()
+        .getListPengujiMhs(nim)
           .then((result) => res.json(result))
           .catch((err) => {
             console.log(err)

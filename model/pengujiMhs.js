@@ -3,7 +3,7 @@ const moment = require('moment');
 var Schema = mongoose.Schema,
 	ObjectId = Schema.ObjectId;
 const mongoSchema = mongoose.Schema({
-	nama: String ,
+	namaMhs: String ,
   nim : String ,
   mk1 : String ,
   mk2 : String ,

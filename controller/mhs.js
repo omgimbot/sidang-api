@@ -2,6 +2,7 @@ const judul = require("../model/judul");
 const kompre = require("../model/kompre");
 const munaqosah = require("../model/munaqosah");
 const sempro = require("../model/sempro");
+const tracerStudy = require("../model/tracerStudy");
 const { requestResponse } = require("../setup");
 
 exports.daftar = (data) =>
@@ -22,6 +23,40 @@ exports.daftar = (data) =>
       .updateOne({ nim: data.nim }, data, { upsert: true })
       .then(() => {
         resolve(requestResponse.common_success);
+      })
+      .catch((err) => reject(requestResponse.common_error));
+  });
+
+  exports.tracerStudi = (data) =>
+  new Promise((resolve, reject) => {
+    console.log(data)
+    tracerStudy
+      .create(data)
+      .then(() => {
+        resolve(requestResponse.common_success);
+      })
+      .catch((err) => {
+        console.log(err)
+        reject(requestResponse.common_error)});
+  });
+
+  
+exports.getAllTracer = () =>
+new Promise((resolve, reject) => {
+  tracerStudy
+    .find()
+    .then((result) => {
+      resolve(result);
+    })
+    .catch((err) => reject(requestResponse.common_error));
+});
+
+exports.getTracerByNim = (nim) =>
+  new Promise((resolve, reject) => {
+    tracerStudy
+      .findOne( {npm: nim} )
+      .then((data) => {
+        resolve(data);
       })
       .catch((err) => reject(requestResponse.common_error));
   });
@@ -55,7 +90,7 @@ exports.getAllPengajuan = (key, nidn) =>
       model = sempro;
     }
     model
-      .find({ dosen: nidn })
+      .find()
       .then((result) => {
         resolve(result);
       })
