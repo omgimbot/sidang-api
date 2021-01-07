@@ -9,6 +9,18 @@ const { requestResponse } = require("../setup");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
+exports.listMhsKompre = () =>
+  new Promise((resolve, reject) => {
+   
+    kompre
+      .find({status:"acc"})
+      .limit(5)
+      .then((data) => {
+        resolve(data);
+      })
+      .catch((err) => reject(requestResponse.common_error));
+  });
+
 exports.inputPengujiMhs = (data) =>
   new Promise((resolve, reject) => {
     pengujiMhs

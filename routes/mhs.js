@@ -101,16 +101,5 @@ module.exports = (router) => {
         res.json(err);
       });
   });
-
-  router.get("/listmhskompre/", (req, res) => {
-    mhs
-      .getMhsKompre()
-      .then((result) => {
-        res.json(result);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  });
   
 };
