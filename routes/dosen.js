@@ -2,6 +2,7 @@ const dosen = require("../controller/dosen");
 const mhs = require("../controller/mhs");
 const uploadConf = require("../config/uploadSetting");
 const fields = uploadConf.upload.single("myFile");
+const { requestResponse } = require("../setup");
 
 // const workbook = new ExcelJS.Workbook();
 const ExcelJS = require("exceljs");
@@ -18,6 +19,130 @@ module.exports = (router) => {
     return bitMap
   }
   
+  router.get("/listmhskompre", (req, res) => {
+    //  console.log("2321")
+    dosen
+      .listMhsKompre()
+      .then((result) =>
+        res.json(result))
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.post("/inputPengujiMhs", (req, res) => {
+    let data = req.body;
+    dosen
+      .inputPengujiMhs(data)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.get("/getListPengujiMhs/:nim", (req, res) => {
+    // console.log("sadfsff")
+    let nim = req.params.nim;
+    dosen
+      .getListPengujiMhs(nim)
+      .then((result) => res.json(result))
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  router.post("/inputPenguji", (req, res) => {
+    let data = req.body;
+    dosen
+      .inputPenguji(data)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.put("/updatePenguji/:id", (req, res) => {
+    dosen
+      .updatePenguji(req.body, req.params.id)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.delete("/hapuspenguji/:id", (req, res) => {
+    let id = req.params.id;
+    // console.log(id)
+    dosen
+      .hapusPenguji(id)
+      .then((result) => res.json(result))
+      .catch((err) => res.json(err));
+  });
+
+  router.post("/inputMk", (req, res) => {
+    let data = req.body;
+    // console.log(data)
+    dosen
+      .inputMk(data)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.get("/getlistpenguji", (req, res) => {
+    // console.log("sadfsff")
+    dosen
+      .getListPenguji()
+      .then((result) => res.json(result))
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  router.get("/listmk", (req, res) => {
+    dosen
+      .getListMk()
+      .then((result) => res.json(result))
+      .catch((err) => res.status(err.status).json({ message: err.message }));
+  });
+
+  router.post("/acc", fields, (req, res) => {
+    let value = JSON.parse(req.body.data);
+    value.surattugas = req.file.filename;
+    dosen
+      .acc(value)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.post("/tolak", (req, res) => {
+    let nim = req.body.nim;
+    let status = req.body.status;
+    let key = req.body.key;
+    console.log(status);
+    dosen
+      .tolak(nim, status, key)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
   router.get("/exportpdf", (req, res) => {
       dosen
       .listMhsKompre()
@@ -1130,136 +1255,12 @@ module.exports = (router) => {
         res.writeHead(200, 
         {
             'Content-Type': 'application/pdf',
-            'Content-Disposition':'attachment;filename="Surat-Tugas-'+dateDownload+'.pdf"'
+            'Content-Disposition': 'attachment;filename="Surat-Tugas-'+dateDownload+'.pdf"'
         });
 
         const download = Buffer.from(data.toString('utf-8'), 'base64');
         res.end(download);
     });
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  });
-
-  router.get("/listmhskompre", (req, res) => {
-    //  console.log("2321")
-    dosen
-      .listMhsKompre()
-      .then((result) =>
-        res.json(result))
-      .catch((err) => {
-        res.json(err);
-      });
-  });
-
-  router.post("/inputPengujiMhs", (req, res) => {
-    let data = req.body;
-    dosen
-      .inputPengujiMhs(data)
-      .then((result) => {
-        res.json(result);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  });
-
-  router.get("/getListPengujiMhs/:nim", (req, res) => {
-    // console.log("sadfsff")
-    let nim = req.params.nim;
-    dosen
-      .getListPengujiMhs(nim)
-      .then((result) => res.json(result))
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
-  router.post("/inputPenguji", (req, res) => {
-    let data = req.body;
-    dosen
-      .inputPenguji(data)
-      .then((result) => {
-        res.json(result);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  });
-
-  router.put("/updatePenguji/:id", (req, res) => {
-    dosen
-      .updatePenguji(req.body, req.params.id)
-      .then((result) => {
-        res.json(result);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  });
-
-  router.delete("/hapuspenguji/:id", (req, res) => {
-    let id = req.params.id;
-    // console.log(id)
-    dosen
-      .hapusPenguji(id)
-      .then((result) => res.json(result))
-      .catch((err) => res.json(err));
-  });
-
-  router.post("/inputMk", (req, res) => {
-    let data = req.body;
-    // console.log(data)
-    dosen
-      .inputMk(data)
-      .then((result) => {
-        res.json(result);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  });
-
-  router.get("/getlistpenguji", (req, res) => {
-    // console.log("sadfsff")
-    dosen
-      .getListPenguji()
-      .then((result) => res.json(result))
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
-  router.get("/listmk", (req, res) => {
-    dosen
-      .getListMk()
-      .then((result) => res.json(result))
-      .catch((err) => res.status(err.status).json({ message: err.message }));
-  });
-
-  router.post("/acc", fields, (req, res) => {
-    let value = JSON.parse(req.body.data);
-    value.surattugas = req.file.filename;
-    dosen
-      .acc(value)
-      .then((result) => {
-        res.json(result);
-      })
-      .catch((err) => {
-        res.json(err);
-      });
-  });
-
-  router.post("/tolak", (req, res) => {
-    let nim = req.body.nim;
-    let status = req.body.status;
-    let key = req.body.key;
-    console.log(status);
-    dosen
-      .tolak(nim, status, key)
-      .then((result) => {
-        res.json(result);
       })
       .catch((err) => {
         res.json(err);
