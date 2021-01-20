@@ -2,6 +2,7 @@ const judul = require("../model/judul");
 const kompre = require("../model/kompre");
 const munaqosah = require("../model/munaqosah");
 const sempro = require("../model/sempro");
+const pengujiMhs = require("../model/pengujiMhs");
 const tracerStudy = require("../model/tracerStudy");
 const { requestResponse } = require("../setup");
 
@@ -27,7 +28,7 @@ exports.daftar = (data) =>
       .catch((err) => reject(requestResponse.common_error));
   });
 
-  exports.tracerStudi = (data) =>
+exports.tracerStudi = (data) =>
   new Promise((resolve, reject) => {
     console.log(data)
     tracerStudy
@@ -37,24 +38,25 @@ exports.daftar = (data) =>
       })
       .catch((err) => {
         console.log(err)
-        reject(requestResponse.common_error)});
+        reject(requestResponse.common_error)
+      });
   });
 
-  
+
 exports.getAllTracer = () =>
-new Promise((resolve, reject) => {
-  tracerStudy
-    .find()
-    .then((result) => {
-      resolve(result);
-    })
-    .catch((err) => reject(requestResponse.common_error));
-});
+  new Promise((resolve, reject) => {
+    tracerStudy
+      .find()
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((err) => reject(requestResponse.common_error));
+  });
 
 exports.getTracerByNim = (nim) =>
   new Promise((resolve, reject) => {
     tracerStudy
-      .findOne( {npm: nim} )
+      .findOne({ npm: nim })
       .then((data) => {
         resolve(data);
       })
@@ -78,6 +80,17 @@ exports.cekJudul = (nim, key) =>
       .catch((err) => reject(requestResponse.common_error));
   });
 
+exports.cekPengujimhs = (nim) =>
+  new Promise((resolve, reject) => {
+    pengujiMhs
+      .findOne({ nim: nim })
+      .then((result) => {
+        // console.log(result);
+        result ? resolve(requestResponse.common_success) : resolve(requestResponse.common_nodata)
+      })
+      .catch((err) => reject(requestResponse.common_error));
+  });
+
 exports.getAllPengajuan = (key, nidn) =>
   new Promise((resolve, reject) => {
     if (key == "judul") {
@@ -97,10 +110,10 @@ exports.getAllPengajuan = (key, nidn) =>
       .catch((err) => reject(requestResponse.common_error));
   });
 
-  exports.getMhsKompre = () =>
+exports.getMhsKompre = () =>
   new Promise((resolve, reject) => {
     kompre
-      .find({status: "acc" })
+      .find({ status: "acc" })
       .then((result) => {
         resolve(result);
       })

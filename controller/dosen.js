@@ -11,9 +11,9 @@ const ObjectId = mongoose.Types.ObjectId;
 
 exports.listMhsKompre = () =>
   new Promise((resolve, reject) => {
-   
+
     kompre
-      .find({status:"acc"})
+      .find({ status: "acc" })
       .limit(5)
       .then((data) => {
         resolve(data);
@@ -92,8 +92,89 @@ exports.getListPengujiMhs = (nim) =>
         { $unwind: { path: "$Mk4", preserveNullAndEmptyArrays: true } },
         { $unwind: { path: "$Mk5", preserveNullAndEmptyArrays: true } },
         { $unwind: { path: "$Mk6", preserveNullAndEmptyArrays: true } },
+
       ])
       .then((dataPengujiMhs) => {
+        // console.log(dataPengujiMhs)
+        resolve(dataPengujiMhs);
+      })
+      .catch((err) => reject(requestResponse.common_error));
+  });
+
+exports.getListPengujiMhsPdf = (nim) =>
+  new Promise((resolve, reject) => {
+    pengujiMhs
+      .aggregate([
+        {
+          $match: {
+            nim: nim,
+          },
+        },
+        {
+          $lookup: {
+            from: "pengujis",
+            localField: "mk1",
+            foreignField: "nim",
+            as: "Mk1",
+          },
+        },
+        {
+          $lookup: {
+            from: "pengujis",
+            localField: "mk2",
+            foreignField: "nim",
+            as: "Mk2",
+          },
+        },
+        {
+          $lookup: {
+            from: "pengujis",
+            localField: "mk3",
+            foreignField: "nim",
+            as: "Mk3",
+          },
+        },
+        {
+          $lookup: {
+            from: "pengujis",
+            localField: "mk4",
+            foreignField: "nim",
+            as: "Mk4",
+          },
+        },
+        {
+          $lookup: {
+            from: "pengujis",
+            localField: "mk5",
+            foreignField: "nim",
+            as: "Mk5",
+          },
+        },
+        {
+          $lookup: {
+            from: "pengujis",
+            localField: "mk6",
+            foreignField: "nim",
+            as: "Mk6",
+          },
+        },
+        { $unwind: { path: "$Mk1", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$Mk2", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$Mk3", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$Mk4", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$Mk5", preserveNullAndEmptyArrays: true } },
+        { $unwind: { path: "$Mk6", preserveNullAndEmptyArrays: true } },
+
+        {
+          $project: {
+            nim: "$nim",
+            namaMhs: "$namaMhs",
+            "penguji": ["$Mk1", "$Mk2", "$Mk3", "$Mk4", "$Mk5", "$Mk6"]
+          }
+        }
+      ])
+      .then((dataPengujiMhs) => {
+        // console.log(dataPengujiMhs)
         resolve(dataPengujiMhs);
       })
       .catch((err) => reject(requestResponse.common_error));
@@ -101,6 +182,7 @@ exports.getListPengujiMhs = (nim) =>
 
 exports.inputPenguji = (data) =>
   new Promise((resolve, reject) => {
+    // console.log(data)
     penguji
       .create(data)
       .then(() => resolve(requestResponse.common_success))

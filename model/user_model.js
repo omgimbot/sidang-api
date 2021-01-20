@@ -8,7 +8,10 @@ const mongoSchema = mongoose.Schema({
 	alamat : String , 
 	fakultas : String , 
 	prodi : String , 
-	dosen : String  ,
+	dosen : {
+        type: String,
+        default: "0",
+    } ,
 	created_at: {
         type: Date,
         default: new Date().toISOString()

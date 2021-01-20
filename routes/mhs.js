@@ -13,9 +13,9 @@ module.exports = (router) => {
       nama: value.nama,
       nim: value.nim,
       judul: value.judul,
-      status : value.status,
-      surattugas : value.surattugas,
-      created_at : new Date().toISOString()
+      status: value.status,
+      surattugas: value.surattugas,
+      created_at: new Date().toISOString()
     };
     mhs
       .daftar(data)
@@ -65,9 +65,20 @@ module.exports = (router) => {
   router.get("/cekJudul/:nim/:key", (req, res) => {
     let nim = req.params.nim
     let key = req.params.key
-    console.log
     mhs
-      .cekJudul(nim,key)
+      .cekJudul(nim, key)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  });
+
+  router.get("/cekpengujimhs/:nim", (req, res) => {
+    let nim = req.params.nim
+    mhs
+      .cekPengujimhs(nim)
       .then((result) => {
         res.json(result);
       })
@@ -81,7 +92,7 @@ module.exports = (router) => {
     let nidn = req.params.nidn
     console.log(key)
     mhs
-      .getAllPengajuan(key,nidn)
+      .getAllPengajuan(key, nidn)
       .then((result) => {
         res.json(result);
       })
@@ -101,5 +112,5 @@ module.exports = (router) => {
         res.json(err);
       });
   });
-  
+
 };
