@@ -21,7 +21,13 @@ module.exports = (router) => {
 
   const getBidang = (key) => {
     let bidang;
-    key = "mk1" || "mk2" ? bidang = "Agama" : key = "mk3" || "mk4" ? bidang = "KEPENDIDIKAN" : bidang = "KEAHLIAN"
+    if (key === "mk1" || key === "mk2") {
+      bidang = "Agama"
+    } else if (key === "mk3" || key === "mk4") {
+      bidang = "KEPENDIDIKAN"
+    } else if (key === "mk5" || key === "mk6") {
+      bidang = "KEAHLIAN"
+    }
     return bidang
   }
 
@@ -326,7 +332,8 @@ module.exports = (router) => {
             let dosen = dosens[0].penguji[0].nama
             let nip = dosens[0].penguji[0].nim
             let materiUji = dosens[0].penguji[0].namaMk
-            let bidangDosen = getBidang(materiUji)
+            let bidang = dosens[0].penguji[0].kodeMk
+            let bidangDosen = getBidang(bidang)
 
             //bundle2
             //table page 1
@@ -493,7 +500,8 @@ module.exports = (router) => {
             let dosen1 = dosens[0].penguji[1].nama
             let nip1 = dosens[0].penguji[1].nim
             let materiUji1 = dosens[0].penguji[1].namaMk
-            let bidangDosen1 = getBidang(materiUji1)
+            let bidang1 = dosens[0].penguji[1].kodeMk
+            let bidangDosen1 = getBidang(bidang1)
 
             //bundle3
 
@@ -659,7 +667,8 @@ module.exports = (router) => {
             let dosen2 = dosens[0].penguji[2].nama
             let nip2 = dosens[0].penguji[2].nim
             let materiUji2 = dosens[0].penguji[2].namaMk
-            let bidangDosen2 = getBidang(materiUji2)
+            let bidang2 = dosens[0].penguji[2].kodeMk
+            let bidangDosen2 = getBidang(bidang2)
 
             //bundle4
 
@@ -825,7 +834,8 @@ module.exports = (router) => {
             let dosen3 = dosens[0].penguji[3].nama
             let nip3 = dosens[0].penguji[3].nim
             let materiUji3 = dosens[0].penguji[3].namaMk
-            let bidangDosen3 = getBidang(materiUji3)
+            let bidang3 = dosens[0].penguji[3].kodeMk
+            let bidangDosen3 = getBidang(bidang3)
 
             //bundle4
 
@@ -992,7 +1002,8 @@ module.exports = (router) => {
             let dosen4 = dosens[0].penguji[4].nama
             let nip4 = dosens[0].penguji[4].nim
             let materiUji4 = dosens[0].penguji[4].namaMk
-            let bidangDosen4 = getBidang(materiUji4)
+            let bidang4 = dosens[0].penguji[4].kodeMk
+            let bidangDosen4 = getBidang(bidang4)
 
             //bundle5
 
@@ -1155,10 +1166,11 @@ module.exports = (router) => {
               row.push({ text: '', alignment: 'center' });
               bodyP515.push(row);
             }
-            let dosen5 = dosens[0].penguji[5].nama
+            let dosen5 = dosens[0].- +penguji[5].nama
             let nip5 = dosens[0].penguji[5].nim
             let materiUji5 = dosens[0].penguji[5].namaMk
-            let bidangDosen5 = getBidang(materiUji5)
+            let bidang5 = dosens[0].penguji[5].kodeMk
+            let bidangDosen5 = getBidang(bidang5)
 
             // console.log(bodyP51q)
 
